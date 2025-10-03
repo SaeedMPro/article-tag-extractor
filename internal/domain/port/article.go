@@ -15,10 +15,11 @@ type ArticleRepository interface {
 // tagExtractor defines the interface for tag extraction logic
 type TagExtractor interface {
 	ExtractTags(title, body string) []string
+	ExtractTagsConcurrently(title, body string) []string
 }
 
 // articleService defines the interface for article business logic
 type ArticleService interface {
-	ProcessArticles(ctx context.Context, articles []entity.ProcessArticleRequest) ([]entity.Article, error)
+	ProcessArticles(ctx context.Context, articles []entity.ProcessArticleRequest) (int, error)
 	GetTopTags(ctx context.Context, limit int) ([]entity.TagFrequency, error)
 }
