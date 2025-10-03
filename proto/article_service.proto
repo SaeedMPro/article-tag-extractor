@@ -4,24 +4,26 @@ package article;
 
 option go_package = "github.com/SaeedMPro/article-tag-extractor/proto;article";
 
-// --- gRPC service definition
+// gRPC service definition
 service ArticleService {
+  // processes batch of articles and returns the number processed
   rpc ProcessArticles(ProcessArticlesRequest) returns (ProcessArticlesResponse);
+
+  // extract the top N frequent tags
   rpc GetTopTags(GetTopTagsRequest) returns (GetTopTagsResponse);
 }
 
-// --- request and response
+// --- request & response
 message ProcessArticlesRequest {
   repeated Article articles = 1;
 }
 
 message ProcessArticlesResponse {
-  repeated ProcessedArticle processed_articles = 1;
-  int32 total_processed = 2;
+  int32 total_processed = 1; 
 }
 
 message GetTopTagsRequest {
-  int32 limit = 1;
+  int32 limit = 1; 
 }
 
 message GetTopTagsResponse {
@@ -32,14 +34,6 @@ message GetTopTagsResponse {
 message Article {
   string title = 1;
   string body = 2;
-}
-
-message ProcessedArticle {
-  string id = 1;
-  string title = 2;
-  string body = 3;
-  repeated string tags = 4;
-  string created_at = 5;
 }
 
 message TagFrequency {
