@@ -12,7 +12,7 @@ func LoadConfig() *Config {
 			Collection: getEnv("MONGODB_COLLECTION", "articles"),
 		},
 		Server: Server{
-			Port: getEnv("SERVER_PORT", "9090"),
+			GRPCPort: getEnv("GRPC_SERVER_PORT", "9090"),
 		},
 	}
 }

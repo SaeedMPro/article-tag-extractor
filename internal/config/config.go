@@ -12,5 +12,5 @@ type Database struct {
 }
 
 type Server struct {
-	Port string
+	GRPCPort string
 }
