@@ -20,7 +20,7 @@ func NewClient(dbConfig config.Database) (*Client, error) {
 	defer cancel()
 
 	// create mongo client
-	client, err := mongo.Connect(ctx, options.Client().ApplyURI(dbConfig.URL))
+	client, err := mongo.Connect(ctx, options.Client().ApplyURI(dbConfig.URI))
 	if err != nil {
 		return nil, fmt.Errorf("mongo connect error: %w", err)
 	}

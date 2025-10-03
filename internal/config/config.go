@@ -6,9 +6,8 @@ type Config struct {
 }
 
 type Database struct {
-	URL        string
+	URI        string
 	DBName     string
-	Collection string
 }
 
 type Server struct {

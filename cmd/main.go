@@ -35,7 +35,7 @@ func main() {
 	}()
 
 	// create repo & service & grpc server
-	articleRepo := mongodb.NewArticleRepository(db.Conn, cfg.Database.DBName, cfg.Database.Collection)
+	articleRepo := mongodb.NewArticleRepository(db.Conn, cfg.Database.DBName, "articles")
 	articleService := app.NewArticleService(articleRepo)
 	grpcServer := grpc.NewServer(articleService)
 
