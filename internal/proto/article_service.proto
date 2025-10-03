@@ -38,5 +38,5 @@ message Article {
 
 message TagFrequency {
   string tag = 1;
-  int64 frequency = 2;
+  int32 frequency = 2;
 }
