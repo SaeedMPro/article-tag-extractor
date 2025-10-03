@@ -23,9 +23,6 @@ func (s *ArticleService) ProcessArticles(ctx context.Context, articles []*entity
 	return count, nil
 }
 
-func (s *ArticleService)GetTopTags(ctx context.Context, limit int) ([]entity.TagFrequency, error){
-
-	//TODO: 
-
-	return nil, nil
+func (s *ArticleService) GetTopTags(ctx context.Context, limit int) ([]entity.TagFrequency, error) {
+	return s.repo.GetTopTags(ctx, limit)
 }
