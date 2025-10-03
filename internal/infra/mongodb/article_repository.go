@@ -38,6 +38,43 @@ func (r *ArticleRepository) SaveArticle(ctx context.Context, article *entity.Art
 }
 
 func (r *ArticleRepository) GetTopTags(ctx context.Context, limit int) ([]entity.TagFrequency, error) {
-	//TODO
-	return nil, nil
+	pipeline := mongo.Pipeline{
+		//unwind the tags array:
+		{{Key: "$unwind", Value: "$tags"}},
+
+		//group by tags and calculate frequency:
+		{{
+			Key: "$group", Value: bson.D{
+				{Key: "_id", Value: "$tags"},
+				{Key: "count", Value: bson.D{{Key: "$sum", Value: 1}}},
+			},
+		}},
+
+		//sort by frequency in desc order:
+		{{Key: "$sort", Value: bson.D{{Key: "count", Value: -1}}}},
+
+		//limit the results:
+		{{Key: "$limit", Value: limit}},
+	}
+
+	cursor, err := r.collection.Aggregate(ctx, pipeline)
+	if err != nil {
+		return nil, err
+	}
+
+	var topTags []entity.TagFrequency
+	for cursor.Next(ctx) {
+		var result struct {
+			Tag   string `bson:"_id"`
+			Count int    `bson:"count"`
+		}
+		if err := cursor.Decode(&result); err != nil {
+			return nil, err
+		}
+		topTags = append(topTags, entity.TagFrequency{
+			Tag:       result.Tag,
+			Frequency: result.Count,
+		})
+	}
+	return topTags, nil
 }
