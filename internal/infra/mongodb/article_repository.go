@@ -33,8 +33,8 @@ func NewArticleRepository(client *mongo.Client, dbName, collectionName string) *
 }
 
 func (r *ArticleRepository) SaveArticle(ctx context.Context, article *entity.Article) error {
-	//TODO
-	return nil
+	_, err := r.collection.InsertOne(ctx, article)
+	return err
 }
 
 func (r *ArticleRepository) GetTopTags(ctx context.Context, limit int) ([]entity.TagFrequency, error) {
