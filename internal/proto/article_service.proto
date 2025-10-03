@@ -2,7 +2,7 @@ syntax = "proto3";
 
 package article;
 
-option go_package = "github.com/SaeedMPro/article-tag-extractor/proto;article";
+option go_package = "./;article";
 
 // gRPC service definition
 service ArticleService {
