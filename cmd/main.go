@@ -14,8 +14,6 @@ import (
 	"github.com/SaeedMPro/article-tag-extractor/internal/config"
 	"github.com/SaeedMPro/article-tag-extractor/internal/infra/grpc"
 	"github.com/SaeedMPro/article-tag-extractor/internal/infra/mongodb"
-	"go.mongodb.org/mongo-driver/mongo"
-	"go.mongodb.org/mongo-driver/mongo/options"
 )
 
 func main() {
@@ -24,20 +22,20 @@ func main() {
 	log.Printf("config loaded: %v", cfg)
 
 	// connect to mongo
-	mongoClient, err := mongo.Connect(context.Background(), options.Client().ApplyURI(cfg.Database.URL))
+	db, err := mongodb.NewClient(cfg.Database)
 	if err != nil {
 		log.Fatalf("failed to connect to MongoDB: %v", err)
 	}
 	defer func() {
 		ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
 		defer cancel()
-		if err := mongoClient.Disconnect(ctx); err != nil {
+		if err := db.Disconnect(ctx); err != nil {
 			log.Printf("mongo disconnect error: %v", err)
 		}
 	}()
 
 	// create repo & service & grpc server
-	articleRepo := mongodb.NewArticleRepository(mongoClient, cfg.Database.DBName, cfg.Database.Collection)
+	articleRepo := mongodb.NewArticleRepository(db.Conn, cfg.Database.DBName, cfg.Database.Collection)
 	articleService := app.NewArticleService(articleRepo)
 	grpcServer := grpc.NewServer(articleService)
 

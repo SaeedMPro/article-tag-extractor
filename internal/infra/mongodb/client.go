@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"time"
 
+	"github.com/SaeedMPro/article-tag-extractor/internal/config"
 	"go.mongodb.org/mongo-driver/mongo"
 	"go.mongodb.org/mongo-driver/mongo/options"
 )
@@ -14,18 +15,18 @@ type Client struct {
 	DBName string
 }
 
-func NewClient(uri, dbName string) (*Client, error) {
+func NewClient(dbConfig config.Database) (*Client, error) {
 	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
 	defer cancel()
 
-	client, err := mongo.Connect(ctx, options.Client().ApplyURI(uri))
+	client, err := mongo.Connect(ctx, options.Client().ApplyURI(dbConfig.URL))
 	if err != nil {
 		return nil, fmt.Errorf("mongo connect error: %w", err)
 	}
 
 	return &Client{
 		Conn:   client,
-		DBName: dbName,
+		DBName: dbConfig.DBName,
 	}, nil
 }
 
