@@ -20,6 +20,7 @@ var stopWords = map[string]bool{
 	"his": true, "she": true, "all": true, "any": true, "both": true, "each": true,
 	"few": true, "more": true, "most": true, "other": true, "some": true,
 	"such": true, "no": true, "nor": true, "so": true, "too": true, "very": true,
+	"those": true, "your": true, "were": true, "over": true, // Added missing stopwords
 }
 
 func IsStopWord(word string) bool {
