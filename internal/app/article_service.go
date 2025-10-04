@@ -10,14 +10,21 @@ import (
 )
 
 type ArticleService struct {
-	repo         port.ArticleRepository
-	tagExtractor port.TagExtractor
+	Repo         port.ArticleRepository
+	TagExtractor port.TagExtractor
 }
 
 func NewArticleService(repo port.ArticleRepository) *ArticleService {
 	return &ArticleService{
-		repo:         repo,
-		tagExtractor: NewTagExtractorService(),
+		Repo:         repo,
+		TagExtractor: NewTagExtractorService(),
+	}
+}
+
+func NewArticleServiceWithExtractor(repo port.ArticleRepository, tagExtractor port.TagExtractor) *ArticleService {
+	return &ArticleService{
+		Repo:         repo,
+		TagExtractor: tagExtractor,
 	}
 }
 
@@ -32,7 +39,7 @@ func (s *ArticleService) ProcessArticles(ctx context.Context, articles []*entity
 		go func(a *entity.Article) {
 			defer wg.Done()
 			
-			tags := s.tagExtractor.ExtractTags(a.Title, a.Body)
+			tags := s.TagExtractor.ExtractTags(a.Title, a.Body)
 			a.Tags = tags
 
 			article := &entity.Article{
@@ -42,7 +49,7 @@ func (s *ArticleService) ProcessArticles(ctx context.Context, articles []*entity
 				CreatedAt: time.Now(),
 			}
 
-			if err := s.repo.SaveArticle(ctx, article); err == nil {
+			if err := s.Repo.SaveArticle(ctx, article); err == nil {
 				mu.Lock()
 				count++
 				mu.Unlock()
@@ -55,5 +62,5 @@ func (s *ArticleService) ProcessArticles(ctx context.Context, articles []*entity
 }
 
 func (s *ArticleService) GetTopTags(ctx context.Context, limit int) ([]entity.TagFrequency, error) {
-	return s.repo.GetTopTags(ctx, limit)
+	return s.Repo.GetTopTags(ctx, limit)
 }

@@ -33,6 +33,9 @@ func (s *Server) Serve(lis net.Listener) error {
 }
 
 func (s *Server) ProcessArticles(ctx context.Context, req *pb.ProcessArticlesRequest) (*pb.ProcessArticlesResponse, error) {
+	if req == nil {
+		return nil, status.Error(codes.InvalidArgument, "request cannot be nil")
+	}
 	if len(req.Articles) == 0 {
 		return nil, status.Error(codes.InvalidArgument, "no articles provided")
 	}
@@ -60,6 +63,9 @@ func (s *Server) ProcessArticles(ctx context.Context, req *pb.ProcessArticlesReq
 }
 
 func (s *Server) GetTopTags(ctx context.Context, req *pb.GetTopTagsRequest) (*pb.GetTopTagsResponse, error) {
+	if req == nil {
+		return nil, status.Error(codes.InvalidArgument, "request cannot be nil")
+	}
 	if req.Limit <= 0 {
 		return nil, status.Error(codes.InvalidArgument, "wrong limit provided")
 	}
