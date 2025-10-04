@@ -11,7 +11,7 @@ func LoadConfig() *Config {
 			DBName:     getEnv("MONGODB_DB_NAME", "article_db"),
 		},
 		Server: Server{
-			GRPCPort: getEnv("GRPC_SERVER_PORT", "9090"),
+			GRPCPort: getEnv("GRPC_SERVER_PORT", "50051"),
 		},
 	}
 }
