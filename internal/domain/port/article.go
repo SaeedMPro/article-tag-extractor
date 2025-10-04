@@ -15,7 +15,6 @@ type ArticleRepository interface {
 // tagExtractor defines the interface for tag extraction logic
 type TagExtractor interface {
 	ExtractTags(title, body string) []string
-	ExtractTagsConcurrently(title, body string) []string
 }
 
 // articleService defines the interface for article business logic
