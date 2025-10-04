@@ -20,7 +20,7 @@ func (t *TagExtractorService) ExtractTags(title, body string) []string {
 	// count word frequencies and filter stop words
 	wordCount := make(map[string]int)
 	for _, token := range tokens {
-		if !utils.IsStopWord(token) && len(token) > 2 {
+		if !utils.IsStopWord(token) {
 			wordCount[token]++
 		}
 	}
