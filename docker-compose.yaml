@@ -4,21 +4,20 @@ services:
     container_name: mongo
     ports:
       - "27017:27017"
-    environment:
-      MONGO_INITDB_ROOT_USERNAME: admin
-      MONGO_INITDB_ROOT_PASSWORD: password
+    restart: unless-stopped
     volumes:
       - mongo-data:/data/db
-  
+
   app:
     build: .
     container_name: article-tag-extractor
     ports:
-      - "8080:8080"
+      - "50051:50051"
     environment:
-      MONGO_URI: mongodb://admin:password@mongo:27017
-      MONGO_DB_NAME: article_db
+      MONGODB_URI: mongodb://mongo:27017
+      MONGODB_DB_NAME: article_db
       GRPC_SERVER_PORT: 50051
+    restart: unless-stopped
     depends_on:
       - mongo
 

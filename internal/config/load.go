@@ -7,7 +7,7 @@ import (
 func LoadConfig() *Config {
 	return &Config{
 		Database: Database{
-			URI:        getEnv("MONGODB_URL", "mongodb://localhost:27017"),
+			URI:        getEnv("MONGODB_URI", "mongodb://localhost:27017"),
 			DBName:     getEnv("MONGODB_DB_NAME", "article_db"),
 		},
 		Server: Server{
