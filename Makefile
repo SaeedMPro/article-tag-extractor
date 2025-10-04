@@ -1,4 +1,4 @@
-# Go parameters
+# parameters
 APP_NAME := article-tag-extractor
 BIN_DIR := bin
 PROTO_DIR := internal/proto
@@ -20,11 +20,38 @@ run: build
 	@echo "Running $(APP_NAME)..."
 	@./$(BIN_DIR)/$(APP_NAME)
 
-# Run tests
+# Run all tests
 .PHONY: test
 test:
-	@echo "Running tests..."
+	@echo "Running all tests..."
 	@go test ./... -v
+
+.PHONY: test-unit
+test-unit:
+	@echo "Running unit tests..."
+	@go test ./... -v -short
+	@echo "Unit tests completed"
+
+# Run specific package tests
+.PHONY: test-app
+test-app:
+	@echo "Running app package tests..."
+	@go test ./internal/app -v
+
+.PHONY: test-utils
+test-utils:
+	@echo "Running utils package tests..."
+	@go test ./utils -v
+
+.PHONY: test-mongodb
+test-mongodb:
+	@echo "Running MongoDB package tests..."
+	@go test ./internal/infra/mongodb -v
+
+.PHONY: test-grpc
+test-grpc:
+	@echo "Running gRPC package tests..."
+	@go test ./internal/infra/grpc -v
 
 # Clean build artifacts
 .PHONY: clean
@@ -65,3 +92,29 @@ install-tools:
 	go install google.golang.org/protobuf/cmd/protoc-gen-go@latest
 	go install google.golang.org/grpc/cmd/protoc-gen-go-grpc@latest
 	protoc --version
+
+# Development workflow
+.PHONY: dev
+dev: deps proto build test-unit
+
+# Help
+.PHONY: help
+help:
+	@echo "Available targets:"
+	@echo "  all              - Build everything (default)"
+	@echo "  build            - Build the application"
+	@echo "  run              - Build and run the application"
+	@echo "  test             - Run all tests"
+	@echo "  test-unit        - Run unit tests only"
+	@echo "  test-app         - Run app package tests"
+	@echo "  test-utils       - Run utils package tests"
+	@echo "  test-mongodb     - Run MongoDB package tests"
+	@echo "  test-grpc        - Run gRPC package tests"
+	@echo "  clean            - Clean build artifacts"
+	@echo "  proto            - Generate protobuf code"
+	@echo "  docker-up        - Start services with Docker Compose"
+	@echo "  docker-down      - Stop Docker Compose services"
+	@echo "  deps             - Install dependencies"
+	@echo "  install-tools    - Install protobuf tools"
+	@echo "  dev              - Development workflow"
+	@echo "  help             - Show this help"
