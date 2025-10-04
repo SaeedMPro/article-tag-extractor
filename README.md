@@ -19,21 +19,8 @@ A high-performance, concurrent microservice for extracting keywords (tags) from 
 - Docker & Docker Compose (optional)
 - protoc (for protocol buffer generation)
 
-## Architecture
 
-```
-┌─────────────────┐    ┌─────────────────┐    ┌─────────────────┐
-│   gRPC Client   │───▶│  gRPC Server    │───▶│  Article Service│
-└─────────────────┘    └─────────────────┘    └─────────────────┘
-                                                        │
-                       ┌─────────────────┐              │
-                       │  MongoDB        │◀─────────────┘
-                       │  - Articles     │
-                       │  - Tag Freq     │
-                       └─────────────────┘
-```
-
-### Project Structure
+## Project Structure
 
 ```
 article-tag-extractor/
